@@ -1,0 +1,6 @@
+{
+	"Name" : "Coopyy.Headhunter",
+	"Description" : "Headhunter gamemode, replaces fastball",
+	"Version": "1.0.0",
+	"LoadPriority": 2
+}
