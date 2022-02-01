@@ -66,11 +66,13 @@ void function UplinkThink() {
 						while ( GetPlayerBatteryCount( player ) > 0 )
 						{
 							entity chosen = possPlayers[RandomInt(possPlayers.len())]
-							chosen.SetOrigin(player.GetOrigin())
-							chosen.RespawnPlayer( null )
-							Remote_CallFunction_NonReplay(chosen, "ServerCallback_FastballRespawnPlayer") 
-							Rodeo_RemoveBatteryOffPlayer(player)
-							EmitSoundOnEntityOnlyToPlayer( player, player, "UI_TitanBattery_Pilot_Give_TitanBattery" )
+							if (!IsAlive(chosen)) {
+								chosen.SetOrigin(player.GetOrigin())
+								chosen.RespawnPlayer( null )
+								Remote_CallFunction_NonReplay(chosen, "ServerCallback_FastballRespawnPlayer") 
+								Rodeo_RemoveBatteryOffPlayer(player)
+								EmitSoundOnEntityOnlyToPlayer( player, player, "UI_TitanBattery_Pilot_Give_TitanBattery" )
+							}
 						}
 					}
 				}
@@ -84,7 +86,8 @@ void function UplinkThink() {
 
 void function Spawnmsg( entity player ){
 	wait(5)
-	SendHudMessage( player, "Headhunter: Return batteries dropped on death to a zone to respawn teammates", -1, 0.2, 255, 255, 0, 0, 0.15, 10, 0.15 )
+	if (IsValid(player))
+		SendHudMessage( player, "Headhunter: Return batteries dropped on death to a zone to respawn teammates", -1, 0.2, 255, 255, 0, 0, 0.15, 10, 0.15 )
 }
 
 void function OnPlayerKilled( entity victim, entity attacker, var damageInfo )
@@ -93,11 +96,14 @@ void function OnPlayerKilled( entity victim, entity attacker, var damageInfo )
 	{
 		entity batt = Rodeo_CreateBatteryPack()
 		batt.SetOrigin( victim.GetOrigin() + < 0, 0, batt.GetBoundingMaxs().z * 2 > )
+		batt.SetVelocity( < 0, 0, 1 > )
 	}
 }
 
 void function SetClientRui( entity player )
 {
+	if (IsValid(player) && PlayerHasBattery(player))
+		Rodeo_RemoveAllBatteriesOffPlayer(player)
 	thread Spawnmsg(player)
 	thread SetClientRuiThread(player)
 }
@@ -135,10 +141,11 @@ void function CreateEndgoals() {
 		Prop.SetAngles( Vector( 0, 0, 0 ) )
 		Prop.SetBlocksRadiusDamage( true )
 		DispatchSpawn( Prop )
-		SetTeam( Prop, 99)
+		SetTeam( Prop, 0)
 
 		Prop.SetTitle( "Goal")
 		Highlight_SetFriendlyHighlight( Prop, "hunted_friendly" )
+		Highlight_SetEnemyHighlight( Prop, "hunted_friendly" )
 		Highlight_SetNeutralHighlight( Prop, "hunted_friendly" )
 
 		file.goals.append(Prop)
