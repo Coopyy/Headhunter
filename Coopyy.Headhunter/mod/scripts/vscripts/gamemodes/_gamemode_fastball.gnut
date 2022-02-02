@@ -59,8 +59,8 @@ void function UplinkThink() {
 				{
 					array<entity> possPlayers
 					foreach ( entity deadPlayer in GetPlayerArrayOfTeam( player.GetTeam() ) )
-					if ( !IsAlive( deadPlayer ) )
-						possPlayers.append(deadPlayer)
+						if ( !IsAlive( deadPlayer ) )
+							possPlayers.append(deadPlayer)
 					if (possPlayers.len() > 0) 
 					{
 						entity chosen = possPlayers[RandomInt(possPlayers.len())]
@@ -95,7 +95,7 @@ void function OnPlayerKilled( entity victim, entity attacker, var damageInfo )
 		batt.SetOrigin( victim.GetOrigin() + < 0, 0, batt.GetBoundingMaxs().z * 2 > )
 		batt.SetVelocity( < 0, 0, 1 > )
 		batt.SetTeam(0)
-		Highlight_SetNeutralHighlight( batt, "battery_thief" )
+		Highlight_SetNeutralHighlight( batt, "health_pickup" )
 	}
 }
 
