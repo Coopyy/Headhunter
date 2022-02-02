@@ -83,7 +83,7 @@ void function UplinkThink() {
 }
 
 void function RemoveBatts() {
-	for (entity player in GetPlayerArray())
+	foreach (entity player in GetPlayerArray())
 		Rodeo_RemoveAllBatteriesOffPlayer( player )   
 }
 
