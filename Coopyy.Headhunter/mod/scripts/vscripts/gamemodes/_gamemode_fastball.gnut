@@ -63,16 +63,13 @@ void function UplinkThink() {
 						possPlayers.append(deadPlayer)
 					if (possPlayers.len() > 0) 
 					{
-						while ( GetPlayerBatteryCount( player ) > 0 )
-						{
-							entity chosen = possPlayers[RandomInt(possPlayers.len())]
-							if (!IsAlive(chosen)) {
-								chosen.SetOrigin(player.GetOrigin())
-								chosen.RespawnPlayer( null )
-								Remote_CallFunction_NonReplay(chosen, "ServerCallback_FastballRespawnPlayer") 
-								Rodeo_RemoveBatteryOffPlayer(player)
-								EmitSoundOnEntityOnlyToPlayer( player, player, "UI_TitanBattery_Pilot_Give_TitanBattery" )
-							}
+						entity chosen = possPlayers[RandomInt(possPlayers.len())]
+						if (!IsAlive(chosen)) {
+							chosen.SetOrigin(player.GetOrigin())
+							chosen.RespawnPlayer( null )
+							Remote_CallFunction_NonReplay(chosen, "ServerCallback_FastballRespawnPlayer") 
+							Rodeo_RemoveBatteryOffPlayer(player)
+							EmitSoundOnEntityOnlyToPlayer( player, player, "UI_TitanBattery_Pilot_Give_TitanBattery" )
 						}
 					}
 				}
@@ -97,10 +94,8 @@ void function OnPlayerKilled( entity victim, entity attacker, var damageInfo )
 		entity batt = Rodeo_CreateBatteryPack()
 		batt.SetOrigin( victim.GetOrigin() + < 0, 0, batt.GetBoundingMaxs().z * 2 > )
 		batt.SetVelocity( < 0, 0, 1 > )
-
-		Highlight_SetFriendlyHighlight( batt, "health_pickup" )
-		Highlight_SetEnemyHighlight( batt, "health_pickup" )
-		Highlight_SetNeutralHighlight( batt, "health_pickup" )
+		batt.SetTeam(0)
+		Highlight_SetNeutralHighlight( batt, "battery_thief" )
 	}
 }
 
