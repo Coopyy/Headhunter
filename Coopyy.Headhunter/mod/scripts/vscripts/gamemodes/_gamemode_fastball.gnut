@@ -33,9 +33,9 @@ void function GamemodeFastball_Init()
 	PrecacheModel($"models/robots/mobile_hardpoint/mobile_hardpoint.mdl")
 
 	AddCallback_OnPlayerKilled( OnPlayerKilled )
+	AddCallback_OnRoundEndCleanup(RemoveBatts)
 	AddCallback_GameStateEnter(eGameState.Playing, StartUplinkThink)
 	AddCallback_GameStateEnter( eGameState.Prematch, CreateEndgoals )
-	AddCallback_GameStateEnter( eGameState.Postmatch, RemoveBatts )
 	SetTimeoutWinnerDecisionFunc( HeadhunterDecideWinner )
 	
 	AddCallback_OnClientConnected( SetClientRui )
@@ -45,7 +45,6 @@ void function GamemodeFastball_Init()
 
 void function StartUplinkThink() {
 	thread UplinkThink()
-	RemoveBatts()
 }
 
 void function UplinkThink() {
@@ -122,6 +121,7 @@ void function SetClientRuiThread(entity player) {
 }
 
 void function CreateEndgoals() {
+	RemoveBatts()
 	foreach (entity goal in file.goals)
 		if (IsValid(goal))
 			goal.Destroy()
