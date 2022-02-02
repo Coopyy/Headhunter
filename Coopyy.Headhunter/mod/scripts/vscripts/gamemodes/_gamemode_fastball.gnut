@@ -1,7 +1,7 @@
 untyped
 global function GamemodeFastball_Init
 
-const array<string> fastballmaps = ["mp_angel_city", "mp_thaw", "mp_wargames", "mp_drydock", "mp_eden", "mp_black_water_canal", "mp_grave", "mp_complex3", "mp_homestead", "mp_forwardbase_kodai", "mp_crashsite3", "mp_rise"]
+const array<string> fastballmaps = ["mp_angel_city", "mp_thaw", "mp_glitch", "mp_wargames", "mp_drydock", "mp_eden", "mp_black_water_canal", "mp_grave", "mp_complex3", "mp_homestead", "mp_forwardbase_kodai", "mp_crashsite3", "mp_rise"]
 
 struct {
 	array<entity> goals
@@ -35,6 +35,7 @@ void function GamemodeFastball_Init()
 	AddCallback_OnPlayerKilled( OnPlayerKilled )
 	AddCallback_GameStateEnter(eGameState.Playing, StartUplinkThink)
 	AddCallback_GameStateEnter( eGameState.Prematch, CreateEndgoals )
+	AddCallback_GameStateEnter( eGameState.Postmatch, RemoveBatts )
 	SetTimeoutWinnerDecisionFunc( HeadhunterDecideWinner )
 	
 	AddCallback_OnClientConnected( SetClientRui )
@@ -44,6 +45,7 @@ void function GamemodeFastball_Init()
 
 void function StartUplinkThink() {
 	thread UplinkThink()
+	RemoveBatts()
 }
 
 void function UplinkThink() {
@@ -70,6 +72,7 @@ void function UplinkThink() {
 							Remote_CallFunction_NonReplay(chosen, "ServerCallback_FastballRespawnPlayer") 
 							Rodeo_RemoveBatteryOffPlayer(player)
 							EmitSoundOnEntityOnlyToPlayer( player, player, "UI_TitanBattery_Pilot_Give_TitanBattery" )
+							player.AddToPlayerGameStat( PGS_ASSAULT_SCORE, 1 )
 						}
 					}
 				}
@@ -78,6 +81,11 @@ void function UplinkThink() {
 
 		WaitFrame()
 	}
+}
+
+void function RemoveBatts() {
+	for (entity player in GetPlayerArray())
+		Rodeo_RemoveAllBatteriesOffPlayer( player )   
 }
 
 
@@ -101,8 +109,6 @@ void function OnPlayerKilled( entity victim, entity attacker, var damageInfo )
 
 void function SetClientRui( entity player )
 {
-	if (IsValid(player) && PlayerHasBattery(player))
-		Rodeo_RemoveAllBatteriesOffPlayer(player)
 	thread Spawnmsg(player)
 	thread SetClientRuiThread(player)
 }
