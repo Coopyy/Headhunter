@@ -83,10 +83,10 @@ void function UplinkThink() {
 }
 
 void function RemoveBatts() {
-	foreach ( entity battery in GetEntArrayByClass_Expensive( "item_titan_battery" ) )
-		battery.Destroy()
 	foreach (entity player in GetPlayerArray())
 		Rodeo_RemoveAllBatteriesOffPlayer( player )   
+	foreach ( entity battery in GetEntArrayByClass_Expensive( "item_titan_battery" ) )
+		battery.Destroy()
 }
 
 
