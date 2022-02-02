@@ -33,7 +33,7 @@ void function GamemodeFastball_Init()
 	PrecacheModel($"models/robots/mobile_hardpoint/mobile_hardpoint.mdl")
 
 	AddCallback_OnPlayerKilled( OnPlayerKilled )
-	AddCallback_OnRoundEndCleanup(RemoveBatts)
+	AddCallback_GameStateEnter( eGameState.WinnerDetermined, RemoveBatts )
 	AddCallback_GameStateEnter(eGameState.Playing, StartUplinkThink)
 	AddCallback_GameStateEnter( eGameState.Prematch, CreateEndgoals )
 	SetTimeoutWinnerDecisionFunc( HeadhunterDecideWinner )
