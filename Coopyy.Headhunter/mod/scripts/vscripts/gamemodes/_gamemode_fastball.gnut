@@ -1,6 +1,10 @@
 untyped
 global function GamemodeFastball_Init
 
+#if SERVER
+global function DEV_TestSpawn
+#endif
+
 const array<string> fastballmaps = ["mp_angel_city", "mp_colony02", "mp_thaw", "mp_glitch", "mp_wargames", "mp_drydock", "mp_eden", "mp_black_water_canal", "mp_grave", "mp_complex3", "mp_homestead", "mp_forwardbase_kodai", "mp_crashsite3", "mp_rise"]
 
 struct {
@@ -45,6 +49,10 @@ void function GamemodeFastball_Init()
 
 void function StartUplinkThink() {
 	thread UplinkThink()
+}
+
+void function DEV_TestSpawn(int index, vector offset) {
+	GetPlayerArray()[0].SetOrigin(file.goals[index].GetOrigin() + offset)
 }
 
 void function UplinkThink() {
@@ -114,16 +122,37 @@ void function SetClientRui( entity player )
 	thread SetClientRuiThread(player)
 }
 
-void function SetClientRuiThread(entity player) {
+void function SetClientRuiThread(entity player) 
+{
 	while (!(file.goals.len() > 2))
-		WaitFrame()
+		wait 0.5
 
 	if (!IsValid(player))
 		return
 	
-	for (int i = 0; i < file.goals.len(); i++) 
-		if (IsValid(file.goals[i]))
+	int k = 0
+	while (!(k > 2)) {
+		for (int i = 0; i < file.goals.len(); i++) 
+		{
+			if (!PlayerInRenderDistance(file.goals[i])) // why the FUCK does this work
+				continue
 			Remote_CallFunction_NonReplay( player, "ServerCallback_FastballUpdatePanelRui", file.goals[i].GetEncodedEHandle(), i )
+			k++
+		}
+		wait 0.1
+	}
+}
+
+bool function PlayerInRenderDistance(entity origin) 
+{
+	if (!IsValid(origin))
+		return false
+	foreach (entity player in GetPlayerArray()) 
+	{
+		if (Distance(player.GetOrigin(), origin.GetOrigin()) < 7500) 
+			return true
+	}
+	return false
 }
 
 void function CreateEndgoals() {
@@ -148,22 +177,27 @@ void function CreateEndgoals() {
 		Prop.kv.solid = SOLID_VPHYSICS
 		Prop.kv.rendercolor = "81 130 151"
 		Prop.kv.contents = int(Prop.kv.contents)
-		Prop.SetOrigin( hardpoint.GetOrigin())
 		Prop.SetAngles( Vector( 0, 0, 0 ) )
 		Prop.SetBlocksRadiusDamage( true )
-		DispatchSpawn( Prop )
 		SetTeam( Prop, 0)
+		file.goals.append(Prop)
+		Prop.SetOrigin( hardpoint.GetOrigin() + GetPointOffset(file.goals.len() - 1)) //ghetto ass spawn fix
+		DispatchSpawn( Prop )
 
 		Prop.SetTitle( "Goal")
-		Highlight_SetFriendlyHighlight( Prop, "hunted_friendly" )
-		Highlight_SetEnemyHighlight( Prop, "hunted_friendly" )
 		Highlight_SetNeutralHighlight( Prop, "hunted_friendly" )
 
-		file.goals.append(Prop)
 	}
 
 	foreach (entity player in GetPlayerArray())
 		SetClientRui(player)
+}
+
+vector function GetPointOffset(int index) 
+{
+	if (GetMapName() == "mp_forwardbase_kodai" && index == 1) //holy shit this code
+		return < -200, 25, 20>
+	return <0, 0, 0>
 }
 
 int function HeadhunterDecideWinner()
