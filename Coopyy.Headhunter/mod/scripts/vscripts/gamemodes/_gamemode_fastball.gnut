@@ -207,6 +207,8 @@ vector function GetPointOffset(int index)
 		return < -200, 25, 20>
 	if (mapname == "mp_grave" && index == 2)
 		return < -200, 0, 35>
+	if (mapname == "mp_grave" && index == 0)
+		return < 40, -20, -340>
 	if (mapname == "mp_homestead" && index == 0)
 		return < 20, -50, 0>
 	if (mapname == "mp_thaw" && index == 1)
