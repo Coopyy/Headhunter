@@ -271,7 +271,7 @@ void function AddFastballSpawn() {
 	FastballAddBuddySpawnForLevel( "mp_grave", TEAM_MILITIA, < 11026.8, -5163.18, 1885.64 >, < 0, 155.05, 0 > )
 	FastballAddBuddySpawnForLevel( "mp_grave", TEAM_IMC, < -1952, -3120, 1993.33 >, < 0, 0, 0 > )
 
-	FastballAddBuddySpawnForLevel( "mp_complex3", TEAM_MILITIA, < -7800.67, -800.02, 510.02 >, < 0, 45.00, 0 > )
+	FastballAddBuddySpawnForLevel( "mp_complex3", TEAM_MILITIA, < -7800.67, -800.02, 560.02 >, < 0, 45.00, 0 > )
 	FastballAddBuddySpawnForLevel( "mp_complex3", TEAM_IMC, < -795.621, -1516.19, 574.965>, < 0, -162, 0 > ) //bro bt be in the wall tho
 
 	FastballAddBuddySpawnForLevel( "mp_forwardbase_kodai", TEAM_MILITIA, < -3200.00, 1461, 1000>, < 0, 0, 0 > )
