@@ -105,13 +105,6 @@ void function RemoveBatts() {
 		battery.Destroy()
 }
 
-
-void function Spawnmsg( entity player ){
-	wait(5)
-	if (IsValid(player))
-		SendHudMessage( player, "Headhunter\nReturn batteries dropped on death to a zone to respawn teammates", -1, 0.2, 255, 200, 0, 0, 0.15, 10, 0.15 )
-}
-
 void function OnPlayerKilled( entity victim, entity attacker, var damageInfo )
 {
 	if ( victim != attacker && victim.IsPlayer() && attacker.IsPlayer() && GetGameState() == eGameState.Playing )
@@ -126,7 +119,6 @@ void function OnPlayerKilled( entity victim, entity attacker, var damageInfo )
 
 void function SetClientRui( entity player )
 {
-	thread Spawnmsg(player)
 	thread SetClientRuiThread(player)
 }
 
@@ -226,6 +218,10 @@ vector function GetPointOffset(int index)
 		return < 75, -75, 0>
 	if (mapname == "mp_colony02" && index == 2)
 		return < 0, 50, 0>
+	if (mapname == "mp_lf_meadow" && index == 2)
+		return <50, 0, 0>
+	if (mapname == "mp_lf_traffic" && index == 0)
+		return <0, 0, 15>
 	
 	return <0, 0, 0>
 }
