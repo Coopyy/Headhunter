@@ -1,0 +1,30 @@
+{
+    "Name": "Headhunter Gamemode",
+    "LoadPriority": 0,
+    "Version": "1.0.0",
+    "RequiredOnClient": true,
+    "Scripts": [
+        {
+            "Path": "gamemodes/sh_gamemode_hh.gnut",
+            "RunOn": "SERVER || CLIENT",
+            "ServerCallback": {
+                "Before": "HHMode_Init"
+            },
+            "ClientCallback": {
+                "Before": "HHMode_Init"
+            }
+        },
+        {
+            "Path": "gamemodes/cl_gamemode_hh.gnut",
+            "RunOn": "CLIENT"
+        },
+        {
+            "Path": "gamemodes/_gamemode_hh.gnut",
+            "RunOn": "SERVER"
+        }
+    ],
+    "Localisation": [
+		"resource/hh_localisation_%language%.txt"
+	]
+    
+}
