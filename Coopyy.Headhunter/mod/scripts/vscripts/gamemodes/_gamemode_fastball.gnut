@@ -6,7 +6,7 @@ global function DEV_TestSpawn
 global function DEV_MovePoint
 #endif
 
-const array<string> fastballmaps = ["mp_angel_city", "mp_colony02", "mp_thaw", "mp_glitch", "mp_wargames", "mp_drydock", "mp_eden", "mp_black_water_canal", "mp_grave", "mp_complex3", "mp_homestead", "mp_forwardbase_kodai", "mp_crashsite3", "mp_rise"]
+const array<string> fastballmaps = ["mp_angel_city", "mp_colony02", "mp_thaw", "mp_glitch", "mp_wargames", "mp_drydock", "mp_eden", "mp_black_water_canal", "mp_grave", "mp_complex3", "mp_homestead", "mp_forwardbase_kodai", "mp_crashsite3", "mp_rise", "mp_relic02"]
 
 struct {
 	array<entity> goals
@@ -109,7 +109,7 @@ void function RemoveBatts() {
 void function Spawnmsg( entity player ){
 	wait(5)
 	if (IsValid(player))
-		SendHudMessage( player, "Headhunter\nReturn batteries dropped on death to a zone to respawn teammates", -1, 0.2, 255, 200, 0, 0, 0.15, 10, 0.15 )
+		SendHudMessage( player, "Headhunter v1.0.1\nReturn batteries dropped on death to a zone to respawn teammates", -1, 0.2, 255, 200, 0, 0, 0.15, 10, 0.15 )
 }
 
 void function OnPlayerKilled( entity victim, entity attacker, var damageInfo )
