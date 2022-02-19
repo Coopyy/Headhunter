@@ -178,7 +178,7 @@ void function CreateEndgoals() {
 	foreach (entity player in GetPlayerArray())
 		thread Spawnmsg(player)
 
-	if (hasmadespawns)
+	if (file.hasmadespawns)
 		return
 
 	foreach (entity goal in file.goals)
@@ -211,6 +211,7 @@ void function CreateEndgoals() {
 		Prop.SetTitle( "Goal")
 		Highlight_SetNeutralHighlight( Prop, "hunted_friendly" )
 	}
+	file.hasmadespawns = true
 }
 
 vector function GetPointOffset(int index) 
