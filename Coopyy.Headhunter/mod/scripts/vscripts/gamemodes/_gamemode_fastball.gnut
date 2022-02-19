@@ -9,6 +9,8 @@ global function DEV_MovePoint
 const array<string> fastballmaps = ["mp_angel_city", "mp_colony02", "mp_thaw", "mp_glitch", "mp_wargames", "mp_drydock", "mp_eden", "mp_black_water_canal", "mp_grave", "mp_complex3", "mp_homestead", "mp_forwardbase_kodai", "mp_crashsite3", "mp_rise", "mp_relic02"]
 
 struct {
+	bool hasmadespawns = false
+
 	array<entity> goals
 	array<vector> spawnoffsets = [Vector(0,50,10), Vector(0,-50,10), Vector(50,0,10), Vector(-50,-0,10)] //shut up
 } file
@@ -172,6 +174,13 @@ bool function PlayerInRenderDistance(entity origin)
 
 void function CreateEndgoals() {
 	RemoveBatts()
+
+	foreach (entity player in GetPlayerArray())
+		thread Spawnmsg(player)
+
+	if (hasmadespawns)
+		return
+
 	foreach (entity goal in file.goals)
 		if (IsValid(goal))
 			goal.Destroy()
@@ -201,11 +210,7 @@ void function CreateEndgoals() {
 
 		Prop.SetTitle( "Goal")
 		Highlight_SetNeutralHighlight( Prop, "hunted_friendly" )
-
 	}
-
-	foreach (entity player in GetPlayerArray())
-		thread Spawnmsg(player)
 }
 
 vector function GetPointOffset(int index) 
