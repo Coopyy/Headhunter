@@ -109,7 +109,7 @@ void function RemoveBatts() {
 void function Spawnmsg( entity player ){
 	wait(5)
 	if (IsValid(player))
-		SendHudMessage( player, "Headhunter v1.0.1\nReturn batteries dropped on death to a zone to respawn teammates", -1, 0.2, 255, 200, 0, 0, 0.15, 10, 0.15 )
+		SendHudMessage( player, "Headhunter v1.0.2\nReturn batteries dropped on death to a zone to respawn teammates", -1, 0.2, 255, 200, 0, 0, 0.15, 10, 0.15 )
 }
 
 void function OnPlayerKilled( entity victim, entity attacker, var damageInfo )
@@ -148,7 +148,7 @@ void function SetClientRuiThread(entity player)
 		{
 			if (i < 3) 
 			{
-				if (!IsValid(file.goals[i]) || !PlayerInRenderDistance(file.goals[i])) // why the FUCK does this work
+				if (!PlayerInRenderDistance(file.goals[i])) // why the FUCK does this work
 					continue
 				Remote_CallFunction_NonReplay( player, "ServerCallback_FastballUpdatePanelRui", file.goals[i].GetEncodedEHandle(), i )
 				k++
@@ -205,7 +205,7 @@ void function CreateEndgoals() {
 	}
 
 	foreach (entity player in GetPlayerArray())
-		SetClientRui(player)
+		thread Spawnmsg(player)
 }
 
 vector function GetPointOffset(int index) 
